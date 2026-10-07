@@ -1,0 +1,7 @@
+{
+  "name":"ow-vod-timeline",
+  "private":true,
+  "scripts":{
+    "check":"node --check app.js && node --check static-page.js && node scripts/qa.mjs"
+  }
+}
