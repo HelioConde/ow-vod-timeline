@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1016">
+  <meta name="description" content="OW VOD Timeline ajuda a revisar VODs de Overwatch com timestamps, categorias e notas locais no navegador.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="OW VOD Timeline — reveja a partida por momentos">
+  <meta property="og:description" content="Abra um vídeo local, marque momentos importantes e transforme a revisão em uma timeline prática.">
+  <meta property="og:url" content="https://helioconde.github.io/ow-vod-timeline/">
+  <link rel="canonical" href="https://helioconde.github.io/ow-vod-timeline/">
+  <title>OW VOD Timeline — reveja a partida por momentos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-mark">OW</span><span>VOD <b>Timeline</b></span></a>
+    <div class="top-actions">
+      <span class="local-pill" data-i18n="local">100% local no MVP</span>
+      <button class="ghost small" id="language-toggle" type="button" aria-label="Mudar idioma">EN</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero shell">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">OVERWATCH · REVISÃO PÓS-PARTIDA</p>
+        <h1 data-i18n="heroTitle">Pare de rever o VOD inteiro. <span>Marque os momentos que importam.</span></h1>
+        <p data-i18n="heroText">Abra um vídeo do seu computador, pause no momento importante e crie uma timeline com contexto, categoria e ação para a próxima partida.</p>
+        <div class="hero-points">
+          <span data-i18n="benefit1">✓ O vídeo não sai do navegador</span>
+          <span data-i18n="benefit2">✓ Notas salvas localmente</span>
+          <span data-i18n="benefit3">✓ Exportação em JSON</span>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <p class="eyebrow" data-i18n="reviewFlow">FLUXO DE REVISÃO</p>
+        <ol>
+          <li><b>01</b><span data-i18n="flow1">Abra seu VOD local</span></li>
+          <li><b>02</b><span data-i18n="flow2">Marque o timestamp</span></li>
+          <li><b>03</b><span data-i18n="flow3">Escreva o que aconteceu</span></li>
+          <li><b>04</b><span data-i18n="flow4">Transforme em próxima ação</span></li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="workspace shell">
+      <section class="panel video-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow" data-i18n="step1">1 · VOD</p><h2 data-i18n="videoTitle">Abra um vídeo para revisar</h2></div>
+          <label class="file-button">
+            <input id="video-file" type="file" accept="video/*">
+            <span data-i18n="openVideo">Escolher vídeo</span>
+          </label>
+        </div>
+
+        <div class="video-stage" id="video-stage">
+          <video id="vod-player" controls playsinline hidden></video>
+          <div class="video-empty" id="video-empty">
+            <strong data-i18n="emptyVideoTitle">Nenhum vídeo aberto</strong>
+            <p data-i18n="emptyVideoText">Escolha um arquivo de vídeo do seu computador. Ele é reproduzido localmente e não é enviado para servidor.</p>
+          </div>
+        </div>
+
+        <div class="video-meta">
+          <label class="field"><span data-i18n="reviewName">Nome da revisão</span><input id="review-name" maxlength="80" placeholder="Ex.: Ranked Support — 07/10"></label>
+          <div class="time-readout"><span data-i18n="currentTime">Tempo atual</span><strong id="current-time">00:00</strong></div>
+        </div>
+      </section>
+
+      <aside class="panel note-panel">
+        <div class="panel-head"><div><p class="eyebrow" data-i18n="step2">2 · MOMENTO</p><h2 data-i18n="noteTitle">O que aconteceu aqui?</h2></div></div>
+
+        <form id="note-form">
+          <div class="field-row">
+            <label class="field"><span data-i18n="timestamp">Timestamp</span><input id="timestamp" inputmode="numeric" placeholder="00:00" required></label>
+            <label class="field"><span data-i18n="category">Categoria</span>
+              <select id="category">
+                <option value="positioning" data-i18n-option="catPositioning">Posicionamento</option>
+                <option value="ultimate" data-i18n-option="catUltimate">Ultimate</option>
+                <option value="target" data-i18n-option="catTarget">Prioridade de alvo</option>
+                <option value="cooldown" data-i18n-option="catCooldown">Cooldown</option>
+                <option value="teamfight" data-i18n-option="catTeamfight">Teamfight</option>
+                <option value="good" data-i18n-option="catGood">Boa decisão</option>
+                <option value="other" data-i18n-option="catOther">Outro</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="field"><span data-i18n="observation">Observação</span><textarea id="observation" rows="4" maxlength="500" placeholder="O que aconteceu e por que vale revisar?" required></textarea></label>
+          <label class="field"><span data-i18n="nextAction">Próxima ação</span><input id="next-action" maxlength="180" placeholder="Ex.: esperar o cooldown antes de avançar"></label>
+
+          <button class="primary" type="submit" data-i18n="addMoment">Adicionar à timeline</button>
+        </form>
+
+        <div class="quick-actions">
+          <button class="ghost" id="use-current-time" type="button" data-i18n="useCurrent">Usar tempo atual</button>
+          <button class="ghost" id="clear-form" type="button" data-i18n="clearForm">Limpar</button>
+        </div>
+
+        <div class="ad-slot"><span data-i18n="ad">PUBLICIDADE</span><small data-i18n="adNote">espaço reservado · fora do player</small></div>
+      </aside>
+    </section>
+
+    <section class="timeline-section shell">
+      <div class="timeline-head">
+        <div><p class="eyebrow" data-i18n="step3">3 · TIMELINE</p><h2 data-i18n="timelineTitle">Momentos da revisão</h2><p id="timeline-summary" class="muted"></p></div>
+        <div class="timeline-actions">
+          <button class="ghost" id="import-button" type="button" data-i18n="import">Importar JSON</button>
+          <button class="ghost" id="export-button" type="button" data-i18n="export">Exportar JSON</button>
+          <button class="ghost danger" id="clear-timeline" type="button" data-i18n="clearTimeline">Limpar timeline</button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden>
+        </div>
+      </div>
+
+      <div class="filters" role="group" aria-label="Categorias">
+        <button class="filter active" type="button" data-filter="all" data-i18n="all">Todos</button>
+        <button class="filter" type="button" data-filter="positioning" data-i18n="catPositioning">Posicionamento</button>
+        <button class="filter" type="button" data-filter="ultimate" data-i18n="catUltimate">Ultimate</button>
+        <button class="filter" type="button" data-filter="teamfight" data-i18n="catTeamfight">Teamfight</button>
+        <button class="filter" type="button" data-filter="good" data-i18n="catGood">Boa decisão</button>
+      </div>
+
+      <div id="timeline-list" class="timeline-list"></div>
+    </section>
+
+    <section class="method shell">
+      <div><p class="eyebrow" data-i18n="methodEyebrow">COMO USAR BEM</p><h2 data-i18n="methodTitle">Marque menos momentos. Escreva melhor.</h2></div>
+      <p data-i18n="methodText">Uma timeline útil não precisa registrar cada erro. Priorize decisões repetidas, lutas importantes e situações que viram uma ação concreta para a próxima partida.</p>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <div><strong>OW VOD Timeline</strong><span data-i18n="disclaimer">Projeto independente e não afiliado à Blizzard Entertainment.</span></div>
+    <nav><a href="sobre.html" data-i18n="about">Sobre</a><a href="privacidade.html" data-i18n="privacy">Privacidade</a><a href="termos.html" data-i18n="terms">Termos</a></nav>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
